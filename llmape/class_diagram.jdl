@@ -1,0 +1,47 @@
+entity Model {
+  ModelName String required,
+  Organization String required,
+  Provider String required,
+  ApiKey String,
+  BaseUrl String,
+  License String required,
+  Active Boolean required
+}
+
+entity Battle {
+  Model1Answer String maxlength(16320),
+  Model2Answer String maxlength(16320),
+  VoteTimestamp Instant
+}
+
+entity Prompt {
+  PromptText String required maxlength(16320),
+  Category Category,
+  IsRejected Boolean required,
+  IsFromPublicPage Boolean required,
+  Timestamp Instant required
+  SessionId String required
+  GenerationModelId Long
+}
+
+entity LeaderboardEntry {
+  EntryJson String required maxlength(8192),
+  Category Category,
+  Timestamp Instant required
+}
+
+enum Category {
+  HINT_GENERATION,
+  EXERCISE_GENERATION,
+  CODE_ASSESSMENT
+}
+
+relationship ManyToOne {
+  Battle{model1} to Model,
+  Battle{model2} to Model,
+  Battle{winnerModel} to Model
+}
+
+relationship OneToOne {
+  Battle{prompt} to Prompt
+}

@@ -1,0 +1,52 @@
+{
+	"annotations": {
+		"changelogDate": "20250401144315"
+	},
+	"applications": "*",
+	"fields": [
+		{
+			"fieldName": "model1Answer",
+			"fieldType": "String",
+			"fieldValidateRules": ["maxlength"],
+			"fieldValidateRulesMaxlength": "16320"
+		},
+		{
+			"fieldName": "model2Answer",
+			"fieldType": "String",
+			"fieldValidateRules": ["maxlength"],
+			"fieldValidateRulesMaxlength": "16320"
+		},
+		{
+			"fieldName": "voteTimestamp",
+			"fieldType": "Instant"
+		}
+	],
+	"name": "Battle",
+	"relationships": [
+		{
+			"otherEntityName": "prompt",
+			"relationshipName": "prompt",
+			"relationshipSide": "left",
+			"relationshipType": "one-to-one"
+		},
+		{
+			"otherEntityName": "model",
+			"relationshipName": "model1",
+			"relationshipSide": "left",
+			"relationshipType": "many-to-one"
+		},
+		{
+			"otherEntityName": "model",
+			"relationshipName": "model2",
+			"relationshipSide": "left",
+			"relationshipType": "many-to-one"
+		},
+		{
+			"otherEntityName": "model",
+			"relationshipName": "winnerModel",
+			"relationshipSide": "left",
+			"relationshipType": "many-to-one"
+		}
+	],
+	"searchEngine": "no"
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20251010123500-1" author="marcel_maier">
+        <addColumn tableName="model">
+          <column name="active" type="boolean" defaultValue="true">
+            <constraints nullable="false"/>
+          </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20251010123500-1-data" author="marcel_maier" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/model.csv"
+                  separator=";"
+                  tableName="model"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="model_name" type="string"/>
+            <column name="organization" type="string"/>
+            <column name="provider" type="string"/>
+            <column name="api_key" type="string"/>
+            <column name="base_url" type="string"/>
+            <column name="license" type="string"/>
+            <column name="active" type="boolean"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

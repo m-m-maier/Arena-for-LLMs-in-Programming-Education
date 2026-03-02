@@ -1,0 +1,1 @@
+export const MAX_LLM_INPUT_OUTPUT_CHARS = 16320;

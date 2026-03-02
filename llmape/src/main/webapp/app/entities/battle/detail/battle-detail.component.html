@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+	<div class="col-8">
+		@if (battle(); as battleRef) {
+			<div>
+				<h2 data-cy="battleDetailsHeading"><span>Battle</span></h2>
+
+				<hr />
+
+				<jhi-alert-error></jhi-alert-error>
+
+				<jhi-alert></jhi-alert>
+
+				<dl class="row-md jh-entity-details">
+					<dt><span>ID</span></dt>
+					<dd>
+						<span>{{ battleRef.id }}</span>
+					</dd>
+					<dt><span>Model 1 Answer</span></dt>
+					<dd>
+						<span>{{ battleRef.model1Answer }}</span>
+					</dd>
+					<dt><span>Model 2 Answer</span></dt>
+					<dd>
+						<span>{{ battleRef.model2Answer }}</span>
+					</dd>
+					<dt><span>Vote Timestamp</span></dt>
+					<dd>
+						<span>{{ battleRef.voteTimestamp | formatMediumDatetime }}</span>
+					</dd>
+					<dt><span>Prompt</span></dt>
+					<dd>
+						@if (battle()!.prompt) {
+							<div>
+								<a [routerLink]="['/prompt', battle()!.prompt?.id, 'view']">{{ battleRef.prompt?.id }}</a>
+							</div>
+						}
+					</dd>
+					<dt><span>Model 1</span></dt>
+					<dd>
+						@if (battle()!.model1) {
+							<div>
+								<a [routerLink]="['/model', battle()!.model1?.id, 'view']">{{ battleRef.model1?.id }}</a>
+							</div>
+						}
+					</dd>
+					<dt><span>Model 2</span></dt>
+					<dd>
+						@if (battle()!.model2) {
+							<div>
+								<a [routerLink]="['/model', battle()!.model2?.id, 'view']">{{ battleRef.model2?.id }}</a>
+							</div>
+						}
+					</dd>
+					<dt><span>Winner Model</span></dt>
+					<dd>
+						@if (battle()!.winnerModel) {
+							<div>
+								<a [routerLink]="['/model', battle()!.winnerModel?.id, 'view']">{{ battleRef.winnerModel?.id }}</a>
+							</div>
+						}
+					</dd>
+				</dl>
+
+				<button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+					<fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+				</button>
+
+				<button type="button" [routerLink]="['/battle', battleRef.id, 'edit']" class="btn btn-primary">
+					<fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+				</button>
+			</div>
+		}
+	</div>
+</div>

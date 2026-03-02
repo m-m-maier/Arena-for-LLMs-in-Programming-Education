@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-center">
+	<div class="col-8">
+		@if (leaderboardEntry(); as leaderboardEntryRef) {
+			<div>
+				<h2 data-cy="leaderboardEntryDetailsHeading"><span>Leaderboard Entry</span></h2>
+
+				<hr />
+
+				<jhi-alert-error></jhi-alert-error>
+
+				<jhi-alert></jhi-alert>
+
+				<dl class="row-md jh-entity-details">
+					<dt><span>ID</span></dt>
+					<dd>
+						<span>{{ leaderboardEntryRef.id }}</span>
+					</dd>
+					<dt><span>Entry Json</span></dt>
+					<dd>
+						<span>{{ leaderboardEntryRef.entryJson }}</span>
+					</dd>
+					<dt><span>Category</span></dt>
+					<dd>
+						<span>{{
+							{
+								null: '',
+								HINT_GENERATION: 'HINT_GENERATION',
+								EXERCISE_GENERATION: 'EXERCISE_GENERATION',
+								CODE_ASSESSMENT: 'CODE_ASSESSMENT',
+							}[leaderboardEntryRef.category ?? 'null']
+						}}</span>
+					</dd>
+					<dt><span>Timestamp</span></dt>
+					<dd>
+						<span>{{ leaderboardEntryRef.timestamp | formatMediumDatetime }}</span>
+					</dd>
+				</dl>
+
+				<button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+					<fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+				</button>
+
+				<button type="button" [routerLink]="['/leaderboard-entry', leaderboardEntryRef.id, 'edit']" class="btn btn-primary">
+					<fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+				</button>
+			</div>
+		}
+	</div>
+</div>

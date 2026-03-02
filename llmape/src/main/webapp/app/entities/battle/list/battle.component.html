@@ -1,0 +1,152 @@
+<div>
+	<h2 id="page-heading" data-cy="BattleHeading">
+		<span>Battles</span>
+
+		<div class="d-flex justify-content-end">
+			<button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+				<fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+				<span>Refresh list</span>
+			</button>
+
+			<button
+				id="jh-create-entity"
+				data-cy="entityCreateButton"
+				class="btn btn-primary jh-create-entity create-battle"
+				[routerLink]="['/battle/new']"
+			>
+				<fa-icon icon="plus"></fa-icon>
+				<span>Create a new Battle</span>
+			</button>
+		</div>
+	</h2>
+
+	<jhi-alert-error></jhi-alert-error>
+
+	<jhi-alert></jhi-alert>
+
+	@if (battles().length === 0) {
+		<div class="alert alert-warning" id="no-result">
+			<span>No Battles found</span>
+		</div>
+	} @else {
+		<div class="table-responsive table-entities" id="entities">
+			<table class="table table-striped" aria-describedby="page-heading">
+				<thead>
+					<tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+						<th scope="col" jhiSortBy="id">
+							<div class="d-flex">
+								<span>ID</span>
+
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="model1Answer">
+							<div class="d-flex">
+								<span>Model 1 Answer</span>
+
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="model2Answer">
+							<div class="d-flex">
+								<span>Model 2 Answer</span>
+
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="voteTimestamp">
+							<div class="d-flex">
+								<span>Vote Timestamp</span>
+
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="prompt.id">
+							<div class="d-flex">
+								<span>Prompt</span>
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="model1.id">
+							<div class="d-flex">
+								<span>Model 1</span>
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="model2.id">
+							<div class="d-flex">
+								<span>Model 2</span>
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col" jhiSortBy="winnerModel.id">
+							<div class="d-flex">
+								<span>Winner Model</span>
+								<fa-icon class="p-1" icon="sort"></fa-icon>
+							</div>
+						</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					@for (battle of battles(); track trackId(battle)) {
+						<tr data-cy="entityTable">
+							<td>
+								<a [routerLink]="['/battle', battle.id, 'view']">{{ battle.id }}</a>
+							</td>
+							<td>{{ battle.model1Answer }}</td>
+							<td>{{ battle.model2Answer }}</td>
+							<td>{{ battle.voteTimestamp | formatMediumDatetime }}</td>
+							<td>
+								@if (battle.prompt) {
+									<div>
+										<a [routerLink]="['/prompt', battle.prompt.id, 'view']">{{ battle.prompt.id }}</a>
+									</div>
+								}
+							</td>
+							<td>
+								@if (battle.model1) {
+									<div>
+										<a [routerLink]="['/model', battle.model1.id, 'view']">{{ battle.model1.id }}</a>
+									</div>
+								}
+							</td>
+							<td>
+								@if (battle.model2) {
+									<div>
+										<a [routerLink]="['/model', battle.model2.id, 'view']">{{ battle.model2.id }}</a>
+									</div>
+								}
+							</td>
+							<td>
+								@if (battle.winnerModel) {
+									<div>
+										<a [routerLink]="['/model', battle.winnerModel.id, 'view']">{{ battle.winnerModel.id }}</a>
+									</div>
+								}
+							</td>
+							<td class="text-end">
+								<div class="btn-group">
+									<a [routerLink]="['/battle', battle.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+										<fa-icon icon="eye"></fa-icon>
+										<span class="d-none d-md-inline">View</span>
+									</a>
+
+									<a [routerLink]="['/battle', battle.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+										<fa-icon icon="pencil-alt"></fa-icon>
+										<span class="d-none d-md-inline">Edit</span>
+									</a>
+
+									<button type="submit" (click)="delete(battle)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+										<fa-icon icon="times"></fa-icon>
+										<span class="d-none d-md-inline">Delete</span>
+									</button>
+								</div>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	}
+</div>

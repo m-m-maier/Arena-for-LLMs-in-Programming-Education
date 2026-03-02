@@ -1,0 +1,167 @@
+<div class="d-flex justify-content-center">
+	<div class="col-8">
+		<form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+			<h2 id="jhi-prompt-heading" data-cy="PromptCreateUpdateHeading">Create or edit a Prompt</h2>
+
+			<div>
+				<jhi-alert-error></jhi-alert-error>
+
+				@if (editForm.controls.id.value !== null) {
+					<div class="mb-3">
+						<label class="form-label" for="field_id">ID</label>
+						<input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+					</div>
+				}
+
+				@let promptTextRef = editForm.get('promptText')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_promptText">Prompt Text</label>
+					<input
+						type="text"
+						class="form-control"
+						name="promptText"
+						id="field_promptText"
+						data-cy="promptText"
+						formControlName="promptText"
+					/>
+					@if (promptTextRef.invalid && (promptTextRef.dirty || promptTextRef.touched)) {
+						<div>
+							@if (editForm.get('promptText')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+							@if (editForm.get('promptText')?.errors?.maxlength) {
+								<small class="form-text text-danger">This field cannot be longer than 16320 characters.</small>
+							}
+						</div>
+					}
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_category">Category</label>
+					<select class="form-control" name="category" formControlName="category" id="field_category" data-cy="category">
+						<option [ngValue]="null"></option>
+						@for (category of categoryValues; track $index) {
+							<option [value]="category">
+								{{
+									{
+										null: '',
+										HINT_GENERATION: 'HINT_GENERATION',
+										EXERCISE_GENERATION: 'EXERCISE_GENERATION',
+										CODE_ASSESSMENT: 'CODE_ASSESSMENT',
+									}[category]
+								}}
+							</option>
+						}
+					</select>
+				</div>
+
+				@let isRejectedRef = editForm.get('isRejected')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_isRejected">Is Rejected</label>
+					<input
+						type="checkbox"
+						class="form-check"
+						name="isRejected"
+						id="field_isRejected"
+						data-cy="isRejected"
+						formControlName="isRejected"
+					/>
+					@if (isRejectedRef.invalid && (isRejectedRef.dirty || isRejectedRef.touched)) {
+						<div>
+							@if (editForm.get('isRejected')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				@let isFromPublicPageRef = editForm.get('isFromPublicPage')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_isFromPublicPage">Is From Public Page</label>
+					<input
+						type="checkbox"
+						class="form-check"
+						name="isFromPublicPage"
+						id="field_isFromPublicPage"
+						data-cy="isFromPublicPage"
+						formControlName="isFromPublicPage"
+					/>
+					@if (isFromPublicPageRef.invalid && (isFromPublicPageRef.dirty || isFromPublicPageRef.touched)) {
+						<div>
+							@if (editForm.get('isFromPublicPage')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				@let timestampRef = editForm.get('timestamp')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_timestamp">Timestamp</label>
+					<div class="d-flex">
+						<input
+							id="field_timestamp"
+							data-cy="timestamp"
+							type="datetime-local"
+							class="form-control"
+							name="timestamp"
+							formControlName="timestamp"
+							placeholder="YYYY-MM-DD HH:mm"
+						/>
+					</div>
+					@if (timestampRef.invalid && (timestampRef.dirty || timestampRef.touched)) {
+						<div>
+							@if (editForm.get('timestamp')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+							<small class="form-text text-danger" [hidden]="!editForm.get('timestamp')?.errors?.datetimelocal"
+								>This field should be a date and time.</small
+							>
+						</div>
+					}
+				</div>
+
+				@let sessionIdRef = editForm.get('sessionId')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_sessionId">Session Id</label>
+					<input type="text" class="form-control" name="sessionId" id="field_sessionId" data-cy="sessionId" formControlName="sessionId" />
+					@if (sessionIdRef.invalid && (sessionIdRef.dirty || sessionIdRef.touched)) {
+						<div>
+							@if (editForm.get('sessionId')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_generationModelId">Generation Model Id</label>
+					<input
+						type="number"
+						class="form-control"
+						name="generationModelId"
+						id="field_generationModelId"
+						data-cy="generationModelId"
+						formControlName="generationModelId"
+					/>
+				</div>
+			</div>
+
+			<div>
+				<button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+					<fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+				</button>
+
+				<button
+					type="submit"
+					id="save-entity"
+					data-cy="entityCreateSaveButton"
+					[disabled]="editForm.invalid || isSaving"
+					class="btn btn-primary"
+				>
+					<fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

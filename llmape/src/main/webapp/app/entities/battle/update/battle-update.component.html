@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-center">
+	<div class="col-8">
+		<form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+			<h2 id="jhi-battle-heading" data-cy="BattleCreateUpdateHeading">Create or edit a Battle</h2>
+
+			<div>
+				<jhi-alert-error></jhi-alert-error>
+
+				@if (editForm.controls.id.value !== null) {
+					<div class="mb-3">
+						<label class="form-label" for="field_id">ID</label>
+						<input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+					</div>
+				}
+
+				@let model1AnswerRef = editForm.get('model1Answer')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_model1Answer">Model 1 Answer</label>
+					<input
+						type="text"
+						class="form-control"
+						name="model1Answer"
+						id="field_model1Answer"
+						data-cy="model1Answer"
+						formControlName="model1Answer"
+					/>
+					@if (model1AnswerRef.invalid && (model1AnswerRef.dirty || model1AnswerRef.touched)) {
+						<div>
+							@if (editForm.get('model1Answer')?.errors?.maxlength) {
+								<small class="form-text text-danger">This field cannot be longer than 16320 characters.</small>
+							}
+						</div>
+					}
+				</div>
+
+				@let model2AnswerRef = editForm.get('model2Answer')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_model2Answer">Model 2 Answer</label>
+					<input
+						type="text"
+						class="form-control"
+						name="model2Answer"
+						id="field_model2Answer"
+						data-cy="model2Answer"
+						formControlName="model2Answer"
+					/>
+					@if (model2AnswerRef.invalid && (model2AnswerRef.dirty || model2AnswerRef.touched)) {
+						<div>
+							@if (editForm.get('model2Answer')?.errors?.maxlength) {
+								<small class="form-text text-danger">This field cannot be longer than 16320 characters.</small>
+							}
+						</div>
+					}
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_voteTimestamp">Vote Timestamp</label>
+					<div class="d-flex">
+						<input
+							id="field_voteTimestamp"
+							data-cy="voteTimestamp"
+							type="datetime-local"
+							class="form-control"
+							name="voteTimestamp"
+							formControlName="voteTimestamp"
+							placeholder="YYYY-MM-DD HH:mm"
+						/>
+					</div>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_prompt">Prompt</label>
+					<select
+						class="form-control"
+						id="field_prompt"
+						data-cy="prompt"
+						name="prompt"
+						formControlName="prompt"
+						[compareWith]="comparePrompt"
+					>
+						<option [ngValue]="null"></option>
+						@for (promptOption of promptsCollection; track $index) {
+							<option [ngValue]="promptOption">{{ promptOption.id }}</option>
+						}
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_model1">Model 1</label>
+					<select
+						class="form-control"
+						id="field_model1"
+						data-cy="model1"
+						name="model1"
+						formControlName="model1"
+						[compareWith]="compareModel"
+					>
+						<option [ngValue]="null"></option>
+						@for (modelOption of modelsSharedCollection; track $index) {
+							<option [ngValue]="modelOption">{{ modelOption.id }}</option>
+						}
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_model2">Model 2</label>
+					<select
+						class="form-control"
+						id="field_model2"
+						data-cy="model2"
+						name="model2"
+						formControlName="model2"
+						[compareWith]="compareModel"
+					>
+						<option [ngValue]="null"></option>
+						@for (modelOption of modelsSharedCollection; track $index) {
+							<option [ngValue]="modelOption">{{ modelOption.id }}</option>
+						}
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_winnerModel">Winner Model</label>
+					<select
+						class="form-control"
+						id="field_winnerModel"
+						data-cy="winnerModel"
+						name="winnerModel"
+						formControlName="winnerModel"
+						[compareWith]="compareModel"
+					>
+						<option [ngValue]="null"></option>
+						@for (modelOption of modelsSharedCollection; track $index) {
+							<option [ngValue]="modelOption">{{ modelOption.id }}</option>
+						}
+					</select>
+				</div>
+			</div>
+
+			<div>
+				<button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+					<fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+				</button>
+
+				<button
+					type="submit"
+					id="save-entity"
+					data-cy="entityCreateSaveButton"
+					[disabled]="editForm.invalid || isSaving"
+					class="btn btn-primary"
+				>
+					<fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,44 @@
+{
+	"annotations": {
+		"changelogDate": "20250401144314"
+	},
+	"applications": "*",
+	"fields": [
+		{
+			"fieldName": "modelName",
+			"fieldType": "String",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "organization",
+			"fieldType": "String",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "provider",
+			"fieldType": "String",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "apiKey",
+			"fieldType": "String"
+		},
+		{
+			"fieldName": "baseUrl",
+			"fieldType": "String"
+		},
+		{
+			"fieldName": "license",
+			"fieldType": "String",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "active",
+			"fieldType": "Boolean",
+			"fieldValidateRules": ["required"]
+		}
+	],
+	"name": "Model",
+	"relationships": [],
+	"searchEngine": "no"
+}

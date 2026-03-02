@@ -1,0 +1,46 @@
+{
+	"annotations": {
+		"changelogDate": "20250401144316"
+	},
+	"applications": "*",
+	"fields": [
+		{
+			"fieldName": "promptText",
+			"fieldType": "String",
+			"fieldValidateRules": ["required", "maxlength"],
+			"fieldValidateRulesMaxlength": "16320"
+		},
+		{
+			"fieldName": "category",
+			"fieldType": "Category",
+			"fieldValues": "HINT_GENERATION,EXERCISE_GENERATION,CODE_ASSESSMENT"
+		},
+		{
+			"fieldName": "isRejected",
+			"fieldType": "Boolean",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "isFromPublicPage",
+			"fieldType": "Boolean",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "timestamp",
+			"fieldType": "Instant",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "sessionId",
+			"fieldType": "String",
+			"fieldValidateRules": ["required"]
+		},
+		{
+			"fieldName": "generationModelId",
+			"fieldType": "Long"
+		}
+	],
+	"name": "Prompt",
+	"relationships": [],
+	"searchEngine": "no"
+}

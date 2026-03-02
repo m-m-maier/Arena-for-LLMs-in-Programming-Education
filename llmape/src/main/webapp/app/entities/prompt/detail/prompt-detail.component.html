@@ -1,0 +1,65 @@
+<div class="d-flex justify-content-center">
+	<div class="col-8">
+		@if (prompt(); as promptRef) {
+			<div>
+				<h2 data-cy="promptDetailsHeading"><span>Prompt</span></h2>
+
+				<hr />
+
+				<jhi-alert-error></jhi-alert-error>
+
+				<jhi-alert></jhi-alert>
+
+				<dl class="row-md jh-entity-details">
+					<dt><span>ID</span></dt>
+					<dd>
+						<span>{{ promptRef.id }}</span>
+					</dd>
+					<dt><span>Prompt Text</span></dt>
+					<dd>
+						<span>{{ promptRef.promptText }}</span>
+					</dd>
+					<dt><span>Category</span></dt>
+					<dd>
+						<span>{{
+							{
+								null: '',
+								HINT_GENERATION: 'HINT_GENERATION',
+								EXERCISE_GENERATION: 'EXERCISE_GENERATION',
+								CODE_ASSESSMENT: 'CODE_ASSESSMENT',
+							}[promptRef.category ?? 'null']
+						}}</span>
+					</dd>
+					<dt><span>Is Rejected</span></dt>
+					<dd>
+						<span>{{ promptRef.isRejected }}</span>
+					</dd>
+					<dt><span>Is From Public Page</span></dt>
+					<dd>
+						<span>{{ promptRef.isFromPublicPage }}</span>
+					</dd>
+					<dt><span>Timestamp</span></dt>
+					<dd>
+						<span>{{ promptRef.timestamp | formatMediumDatetime }}</span>
+					</dd>
+					<dt><span>Session Id</span></dt>
+					<dd>
+						<span>{{ promptRef.sessionId }}</span>
+					</dd>
+					<dt><span>Generation Model Id</span></dt>
+					<dd>
+						<span>{{ promptRef.generationModelId }}</span>
+					</dd>
+				</dl>
+
+				<button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+					<fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+				</button>
+
+				<button type="button" [routerLink]="['/prompt', promptRef.id, 'edit']" class="btn btn-primary">
+					<fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+				</button>
+			</div>
+		}
+	</div>
+</div>

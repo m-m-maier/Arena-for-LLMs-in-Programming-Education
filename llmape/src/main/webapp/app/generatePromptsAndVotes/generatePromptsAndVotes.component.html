@@ -1,0 +1,105 @@
+<div class="px-3">
+	<div class="row pb-5">
+		<div class="col-md-12">
+			<p class="fs-1 px-3 fw-bold">Generate prompts and votes using registered LLMs</p>
+			<p class="fs-4 px-3">
+				Here you can select the category (and active model) to generate a specified number of prompts with.
+			</p>
+			<p class="fs-4 px-3">
+				For each prompt a model generates, two other randomly selected models will generate responses on the generated prompt, therefore at least three active models are required.
+			</p>
+			<p class="fs-4 px-3">
+				The selected model will also be the one that votes for the better response.
+			</p>
+		</div>
+	</div>
+
+	<div class="row pb-5 px-3">
+		<div class="card text-white bg-primary border-light border-2 col-md-12 pb-3">
+			<div class="card-body">
+				<div class="row px-3" *ngIf="startingError">
+					<div class="alert alert-danger">
+						{{ startingError }}
+					</div>
+				</div>
+				<div class="row px-3" *ngIf="responseError">
+					<div class="alert alert-danger">
+						{{ responseError }}
+					</div>
+				</div>
+				<div class="row pb-4 g-3">
+					<div class="col-12 col-md-6">
+						<label for="categorySelect" class="form-label">Category</label>
+						<select id="categorySelect"
+							class="form-select bg-primary text-white border-light border-2"
+							[(ngModel)]="selectedCategory" name="category" [disabled]="this.waitingForResponse">
+							<option [ngValue]="null" disabled>Select a category</option>
+							<option *ngFor="let category of categories" [ngValue]="category">
+								{{ categoryLabels[category] }}
+							</option>
+						</select>
+					</div>
+					<div class="col-12 col-md-6">
+						<label for="modelSelect" class="form-label">Model</label>
+						<select id="modelSelect"
+							class="form-select bg-primary text-white border-light border-2"
+							[(ngModel)]="selectedModel" name="model" [disabled]="this.waitingForResponse">
+							<option [ngValue]="null" selected>Use all models</option>
+							<option *ngFor="let model of models" [ngValue]="model">
+								{{ model.modelName }}
+							</option>
+						</select>
+					</div>
+				</div>
+				<div class="row pb-4 g-3">
+					<div class="col-12 col-md-6">
+						<label for="amountSelect" class="form-label">Prompts per model</label>
+						<select id="amountSelect"
+							class="form-select bg-primary text-white border-light border-2"
+							[(ngModel)]="selectedAmount" name="amount" [disabled]="this.waitingForResponse">
+							<option [ngValue]="1" selected>1</option>
+							<option [ngValue]="2">2</option>
+							<option [ngValue]="5">5</option>
+							<option [ngValue]="10">10</option>
+							<option [ngValue]="15">15</option>
+							<option [ngValue]="20">20</option>
+							<option [ngValue]="25">25</option>
+							<option [ngValue]="50">50</option>
+							<option [ngValue]="100">100</option>
+						</select>
+					</div>
+					<div class="col-12 col-md-6">
+						<label class="form-label invisible d-none d-md-block">Button</label>
+						<button type="button" class="btn border-light border-2 btn-warning w-100 position-relative"
+							(click)="submit()"
+							[disabled]="!this.selectedCategory || this.startingError || this.waitingForResponse ">
+							<fa-icon icon="robot"
+								class="position-absolute start-0 ms-3 top-50 translate-middle-y"></fa-icon>
+							<span>Generate</span>
+						</button>
+					</div>
+				</div>
+				<div class="row g-3 pb-4">
+					<div class="col-md-6" *ngFor="let request of generatePromptRequests; let i = index">
+						<div class="card h-100 text-white bg-primary border-light">
+							<div class="card-header" [ngClass]="{ 'bg-success': request.response?.wasSuccessful, 'bg-danger': request.response?.wasSuccessful === false }">
+								<strong>Model: {{request.modelName}}</strong>
+							</div>
+							<div class="card-body">
+								<div *ngIf="!generatePromptRequests[i].waitingForResponse">
+									<div [innerHTML]="generatePromptRequests[i].response?.detailedMessage" class="font-monospace"
+										style="white-space: pre-wrap"></div>
+								</div>
+								<div *ngIf="generatePromptRequests[i].waitingForResponse" class="text-center">
+									<div class="spinner-border" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

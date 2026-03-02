@@ -1,0 +1,116 @@
+<div class="d-flex justify-content-center">
+	<div class="col-8">
+		<form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+			<h2 id="jhi-model-heading" data-cy="ModelCreateUpdateHeading">Create or edit a Model</h2>
+
+			<div>
+				<jhi-alert-error></jhi-alert-error>
+
+				@if (editForm.controls.id.value !== null) {
+					<div class="mb-3">
+						<label class="form-label" for="field_id">ID</label>
+						<input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+					</div>
+				}
+
+				@let modelNameRef = editForm.get('modelName')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_modelName">Model Name</label>
+					<input type="text" class="form-control" name="modelName" id="field_modelName" data-cy="modelName" formControlName="modelName" />
+					@if (modelNameRef.invalid && (modelNameRef.dirty || modelNameRef.touched)) {
+						<div>
+							@if (editForm.get('modelName')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				@let organizationRef = editForm.get('organization')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_organization">Organization</label>
+					<input
+						type="text"
+						class="form-control"
+						name="organization"
+						id="field_organization"
+						data-cy="organization"
+						formControlName="organization"
+					/>
+					@if (organizationRef.invalid && (organizationRef.dirty || organizationRef.touched)) {
+						<div>
+							@if (editForm.get('organization')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				@let providerRef = editForm.get('provider')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_provider">Provider</label>
+					<input type="text" class="form-control" name="provider" id="field_provider" data-cy="provider" formControlName="provider" />
+					@if (providerRef.invalid && (providerRef.dirty || providerRef.touched)) {
+						<div>
+							@if (editForm.get('provider')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_apiKey">Api Key</label>
+					<input type="text" class="form-control" name="apiKey" id="field_apiKey" data-cy="apiKey" formControlName="apiKey" />
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" for="field_baseUrl">Base Url</label>
+					<input type="text" class="form-control" name="baseUrl" id="field_baseUrl" data-cy="baseUrl" formControlName="baseUrl" />
+				</div>
+
+				@let licenseRef = editForm.get('license')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_license">License</label>
+					<input type="text" class="form-control" name="license" id="field_license" data-cy="license" formControlName="license" />
+					@if (licenseRef.invalid && (licenseRef.dirty || licenseRef.touched)) {
+						<div>
+							@if (editForm.get('license')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+
+				@let activeRef = editForm.get('active')!;
+				<div class="mb-3">
+					<label class="form-label" for="field_active">Active</label>
+					<input type="checkbox" class="form-check" name="active" id="field_active" data-cy="active" formControlName="active" />
+					@if (activeRef.invalid && (activeRef.dirty || activeRef.touched)) {
+						<div>
+							@if (editForm.get('active')?.errors?.required) {
+								<small class="form-text text-danger">This field is required.</small>
+							}
+						</div>
+					}
+				</div>
+			</div>
+
+			<div>
+				<button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+					<fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+				</button>
+
+				<button
+					type="submit"
+					id="save-entity"
+					data-cy="entityCreateSaveButton"
+					[disabled]="editForm.invalid || isSaving"
+					class="btn btn-primary"
+				>
+					<fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>

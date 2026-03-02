@@ -1,0 +1,27 @@
+{
+	"annotations": {
+		"changelogDate": "20250610151845"
+	},
+	"applications": "*",
+	"fields": [
+		{
+			"fieldName": "entryJson",
+			"fieldType": "String",
+			"fieldValidateRules": ["required", "maxlength"],
+			"fieldValidateRulesMaxlength": "8192"
+		},
+		{
+			"fieldName": "category",
+			"fieldType": "Category",
+			"fieldValues": "HINT_GENERATION,EXERCISE_GENERATION,CODE_ASSESSMENT"
+		},
+		{
+			"fieldName": "timestamp",
+			"fieldType": "Instant",
+			"fieldValidateRules": ["required"]
+		}
+	],
+	"name": "LeaderboardEntry",
+	"relationships": [],
+	"searchEngine": "no"
+}

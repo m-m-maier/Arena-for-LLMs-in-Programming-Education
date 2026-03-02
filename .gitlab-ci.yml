@@ -1,0 +1,52 @@
+default:
+  image: ubuntu:24.04
+  tags:
+    - llmape-runner
+
+deploy_to_server:
+  stage: deploy
+  only:
+    - main
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY_B64" | base64 -d > ~/.ssh/private_key
+    - chmod 600 ~/.ssh/private_key
+    - echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+  script:
+    - |
+      ssh -vvv -i ~/.ssh/private_key -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST /bin/bash -s << EOF
+        set -eo pipefail
+      
+        export BASE_URL=$BASE_URL
+        export DB_PASSWORD_LLMAPE=$DB_PASSWORD_LLMAPE
+        export EMAIL_FROM=$EMAIL_FROM
+        export GMAIL_CLIENT_ID=$GMAIL_CLIENT_ID
+        export GMAIL_CLIENT_SECRET=$GMAIL_CLIENT_SECRET
+        export GMAIL_REFRESH_TOKEN=$GMAIL_REFRESH_TOKEN
+        export JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=$JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+        export OPENAI_API_TOKEN=$OPENAI_API_TOKEN
+        export RATE_LIMIT_GLOBAL_PER_HOUR=$RATE_LIMIT_GLOBAL_PER_HOUR
+        export RATE_LIMIT_PER_IP_PER_HOUR=$RATE_LIMIT_PER_IP_PER_HOUR        
+
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        grep -q "git.uibk.ac.at" ~/.ssh/known_hosts || ssh-keyscan git.uibk.ac.at >> ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/known_hosts
+        cd $APP_DIR || git clone git@git.uibk.ac.at:csav4644/arena-for-llms-in-programming-education.git $APP_DIR && cd $APP_DIR
+        git fetch --all
+        git reset --hard origin/main
+
+        echo "Building LLM-APE app..."
+        cd llmape
+        chmod +x ./mvnw
+        ./mvnw clean package -Pprod -DskipTests
+        cd ..
+
+        echo "Running docker-compose..."
+        docker-compose down
+        docker-compose up -d --build
+      EOF

@@ -1,0 +1,90 @@
+<div class="px-3">
+	<div class="row pb-5">
+		<div class="col-md-12">
+			<p class="fs-1 px-3 fw-bold">Quickly test all provided LLMs at once</p>
+			<p class="fs-4 px-3">
+				Here you can select the LLMs you would like to compare - write one prompt to receive responses from all
+				those models concurrently
+			</p>
+		</div>
+	</div>
+
+	<div class="row pb-5 px-3">
+		<div class="card text-white bg-primary border-light border-2 col-md-12 pb-3">
+			<div class="card-body">
+				@if (promptMaximumLengthReached()) {
+				<div class="row px-3">
+					<div class="alert alert-warning">
+						<strong>Your prompt reached the maximum length!</strong> Please check if possibly pasted input
+						fits in.
+					</div>
+				</div>
+				}
+				<div class="row px-1">
+					<jhi-alert-error></jhi-alert-error>
+				</div>
+				<div class="row pb-4 g-3">
+					<div class="col-12 col-md-10">
+						<label for="promptTextarea" class="form-label mt-3 mt-md-0">Prompt</label>
+						<textarea #promptTextarea class="form-control bg-primary text-white border-light border-2"
+							[(ngModel)]="prompt" [placeholder]="'Insert your amazing prompt here...'"
+							id="promptTextarea" rows="1" [maxlength]="promptMaxLength"
+							(input)="onTextAreaInput(promptTextarea)"></textarea>
+					</div>
+					<div class="col-12 col-md-2">
+						<label class="form-label invisible d-none d-md-block">Button</label>
+						<button type="button" class="btn border-light border-2 btn-warning w-100 position-relative"
+							(click)="submitPrompt()"
+							[disabled]="this.prompt.length > promptMaxLength || waitingForResponse || this.prompt.length === 0 || allUnselected()">
+							<fa-icon icon="paper-plane"
+								class="position-absolute start-0 ms-3 top-50 translate-middle-y"></fa-icon>
+							<span>Submit</span>
+						</button>
+					</div>
+				</div>
+				<div class="row pb-4 g-3">
+					<div class="col-12">
+						<div class="card h-100 text-white bg-primary border-light">
+							<div class="card-header">Model selection</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-12 col-sm-6 col-md-4 col-lg-3"
+										*ngFor="let modelSelection of modelSelections">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox"
+												[id]="'check-' + modelSelection.model.id"
+												[(ngModel)]="modelSelection.selected" name="modelSelection" />
+											<label class="form-check-label" [for]="'check-' + modelSelection.model.id">
+												{{ modelSelection.model.modelName }}
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row g-3 pb-4">
+					<div class="col-md-6" *ngFor="let response of responses; let i = index">
+						<div class="card h-100 text-white bg-primary border-light">
+							<div class="card-header">
+								Model: <strong>{{ getModelNameById(response.id) }}</strong>
+							</div>
+							<div class="card-body">
+								<div *ngIf="!waitingForResponse">
+									<div [innerHTML]="responses[i].text" class="font-monospace"
+										style="white-space: pre-wrap"></div>
+								</div>
+								<div *ngIf="waitingForResponse" class="text-center">
+									<div class="spinner-border" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+	<head>
+		<title th:text="#{email.rate-limit-exceeded.title}">JHipster rate limit exceeded</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+	</head>
+	<body>
+		<p th:text="#{email.rate-limit.greeting}">Dear</p>
+		<p th:text="#{email.rate-limit-exceeded.text1}">Your JHipster application rate limit is exceeded</p>
+    <p th:text="${isGlobalRateLimit == true} ? 'Affected rate limit: GLOBAL RATE LIMIT' : 'Affected rate limit: PER IP RATE LIMIT'"></p>
+		<p>
+			<span th:text="#{email.rate-limit.text2}">Regards, </span>
+			<br />
+			<em th:text="#{email.rate-limit.signature}">JHipster.</em>
+		</p>
+	</body>
+</html>

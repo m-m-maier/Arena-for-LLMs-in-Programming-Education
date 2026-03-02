@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20251124172000-1" author="marcel_maier">
+        <addColumn tableName="prompt">
+          <column name="generation_model_id" type="bigint">
+            <constraints nullable="true" />
+          </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20251124172000-1-data" author="marcel_maier" context="faker">
+        <loadData
+            file="config/liquibase/fake-data/prompt.csv"
+            separator=";"
+            tableName="prompt"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="prompt_text" type="string"/>
+            <column name="category" type="string"/>
+            <column name="is_rejected" type="boolean"/>
+            <column name="is_from_public_page" type="boolean"/>
+            <column name="timestamp" type="date"/>
+            <column name="session_id" type="string"/>
+            <column name="generation_model_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+</databaseChangeLog>

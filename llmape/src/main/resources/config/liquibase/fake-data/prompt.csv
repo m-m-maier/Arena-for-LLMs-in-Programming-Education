@@ -1,0 +1,11 @@
+id;prompt_text;category;is_rejected;is_from_public_page;timestamp;session_id;generation_model_id
+1;unto downshift buzzing;HINT_GENERATION;true;false;2025-04-01T01:55:31;defiantly;15748
+2;knavishly;CODE_ASSESSMENT;true;true;2025-04-01T04:05:29;who;5259
+3;to;HINT_GENERATION;true;false;2025-03-31T17:01:31;powerless shampoo;5107
+4;amid mount;CODE_ASSESSMENT;false;false;2025-03-31T22:45:15;woefully behest ugh;5282
+5;creative incidentally huzzah;EXERCISE_GENERATION;false;true;2025-03-31T23:15:51;dimly once blissfully;8408
+6;swelter;EXERCISE_GENERATION;false;false;2025-03-31T21:06:39;meh;10891
+7;interesting;EXERCISE_GENERATION;false;false;2025-03-31T17:58:33;onto frequent;6696
+8;as;CODE_ASSESSMENT;true;false;2025-03-31T21:11:39;kiddingly ew;15104
+9;considering;HINT_GENERATION;false;false;2025-04-01T02:19:57;via unrealistic contravene;8174
+10;proud a;HINT_GENERATION;true;false;2025-04-01T12:00:18;oof;10479

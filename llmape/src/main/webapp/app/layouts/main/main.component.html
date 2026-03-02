@@ -1,0 +1,23 @@
+<div class="d-flex flex-column min-vh-100">
+	<jhi-page-ribbon></jhi-page-ribbon>
+
+	<div>
+		<router-outlet name="navbar"></router-outlet>
+	</div>
+
+	<div class="container-fluid pt-5 pb-5 flex-fill">
+		<div class="row">
+			<div class="col-xxl-1 col-0"></div>
+			<div class="col-xxl-10 col-12">
+				<div class="text-white">
+					<router-outlet></router-outlet>
+				</div>
+			</div>
+			<div class="col-xxl-1 col-0"></div>
+		</div>
+	</div>
+
+	<div class="bg-primary" style="min-height: 200px; width: 100%">
+		<jhi-footer></jhi-footer>
+	</div>
+</div>

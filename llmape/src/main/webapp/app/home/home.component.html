@@ -1,0 +1,277 @@
+<ng-template #autoOpenModal let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title text-white fw-bold">Welcome LLM-APE user!</h4>
+	</div>
+	<div class="modal-body text-white">
+		<p>Users of this website are required to agree to the following terms:</p>
+		<p>
+			The service is a research preview. It only provides limited safety measures and may generate offensive
+			content. It must not be used
+			for any illegal, harmful, violent, racist, or sexual purposes. Please do not upload any private information.
+		</p>
+		<p>
+			The service collects textual user dialogue data and reserves the right to distribute it under a Creative
+			Commons Attribution (CC-BY)
+			or a similar license.
+		</p>
+
+		You may only use this website for your personal or internal business purposes. You must not access the website
+		programmatically, scrape
+		or extract data, manipulate any leaderboard or ranking, or authorize or pay others to access or use the website
+		on your behalf.
+		Unauthorized use may result in suspension or termination of your access, including access by your organization.
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn border-light border-2 btn-warning" (click)="modal.close('ok')">OK</button>
+	</div>
+</ng-template>
+
+<div class="px-3">
+	<div class="row pb-5">
+		<div class="col-md-12">
+			<p class="fs-1 px-3 fw-bold">Welcome to LLM-APE: An LLM Arena for Programming Education</p>
+			<p class="fs-4 px-3">
+				LLM-APE 🐵 is an open platform, for crowdsourced AI benchmarking with a focus on programming educational
+				tasks.
+			</p>
+			<p class="fs-4 px-3">Your votes contribute to the rankings in the leaderboard, so please vote responsibly!
+			</p>
+			<p class="px-3">
+				Instructions: Select category ➡️ Write prompt ➡️ Submit prompt ➡️ Wait for response of two randomly
+				selected LLMs ➡️ Vote for
+				preferred response ➡️ Model identities will be disclosed ➡️ Checkout the leaderboard
+			</p>
+		</div>
+	</div>
+	<div class="row pb-5 px-3" [id]="votingSectionId">
+		<p class="fs-4 fw-bold">Participate in voting:</p>
+		<div class="card text-white bg-primary border-light border-2 col-md-12 pb-3">
+			<div class="card-body">
+				@if (promptMaximumLengthReached()) {
+				<div class="row px-3">
+					<div class="alert alert-warning">
+						<strong>Your prompt reached the maximum length!</strong> Please check if possibly pasted input
+						fits in.
+					</div>
+				</div>
+				}
+				@if (selectedPromptCategory === "HINT_GENERATION") {
+				<div class="row px-3">
+					<div class="alert alert-secondary">
+						<strong>In category "Hint Generation" you are expected to ask help for a programming exercise or
+							task,
+							while the large language models are asked to not provide any solutions. The
+							following text is prepended your prompt:</strong> <i>You are an excellent tutor. An
+							excellent
+							tutor is a guide and an educator. Your main goal is to teach students problem-solving skills
+							while they work on a programming exercise. An excellent tutor never under any circumstances
+							responds with code, pseudocode, or implementations of concrete functionalities. An excellent
+							tutor never under any circumstances tells instructions that contain concrete steps and
+							implementation details. Instead, he provides a single subtle clue, a counter-question, or
+							best
+							practice to move the student’s attention to an aspect of his problem or task so they can
+							find a
+							solution on their own. An excellent tutor does not guess, so if you don’t know something,
+							say
+							"Sorry, I don’t know" and tell the student to ask a human tutor. The students prompt is:</i>
+						[HERE
+						COMES YOUR PROMPT]
+					</div>
+				</div>
+				}
+				@if (selectedPromptCategory === "EXERCISE_GENERATION") {
+				<div class="row px-3">
+					<div class="alert alert-secondary">
+						<strong>In category "Exercise Generation" you are expected to ask for generating an exercise or
+							assignment to practice some specific programming topic in a given programming
+							language.</strong>
+					</div>
+				</div>
+				}
+				@if (selectedPromptCategory === "CODE_ASSESSMENT") {
+				<div class="row px-3">
+					<div class="alert alert-secondary">
+						<strong>In category "Code Assessment" you are expected to ask for an assessment of some given
+							code to receive help with grading students' solutions.</strong>
+					</div>
+				</div>
+				}
+				@if (promptRejected()) {
+				<div class="row px-3">
+					<div class="alert alert-danger">
+						<strong>Your prompt was rejected!</strong> Please try again with a different prompt. Make sure
+						to use a fitting category.<br />
+						{{ rejectionReason }}
+					</div>
+				</div>
+				}
+
+				<div class="row px-1">
+					<jhi-alert-error></jhi-alert-error>
+				</div>
+
+				<div class="row pb-4 g-3">
+					<div class="col-12 col-md-2">
+						<label for="promptCategorySelect" class="form-label">Category</label>
+						<select id="promptCategorySelect"
+							class="form-select bg-primary text-white border-light border-2"
+							[(ngModel)]="selectedPromptCategory" name="category">
+							<option [ngValue]="null" disabled>Select a category</option>
+							<option *ngFor="let category of categories" [ngValue]="category">
+								{{ categoryLabels[category] }}
+							</option>
+						</select>
+					</div>
+					<div class="col-12 col-md-8">
+						<label for="promptTextarea" class="form-label mt-3 mt-md-0">Prompt</label>
+						<textarea #promptTextarea class="form-control bg-primary text-white border-light border-2"
+							[(ngModel)]="prompt"
+							[placeholder]="'Insert your amazing prompt regarding ' + categoryLabels[selectedPromptCategory] + ' here...'"
+							id="promptTextarea" rows="1" [maxlength]="promptMaxLength"
+							(input)="onTextAreaInput(promptTextarea)"></textarea>
+					</div>
+					<div class="col-12 col-md-2">
+						<label class="form-label invisible d-none d-md-block">Button</label>
+						<button type="button" class="btn border-light border-2 btn-warning w-100 position-relative"
+							(click)="submitPrompt()"
+							[disabled]="this.prompt.length > promptMaxLength || waitingForResponseA || waitingForResponseB || this.prompt.length === 0 || !voteButtonsDisabled">
+							<fa-icon icon="paper-plane"
+								class="position-absolute start-0 ms-3 top-50 translate-middle-y"></fa-icon>
+							<span>Submit</span>
+						</button>
+					</div>
+				</div>
+				<div class="row g-3 pb-4">
+					<div class="col-md-6">
+						<div class="card h-100 text-white bg-primary border-light">
+							<div class="card-header">
+								Model A: <strong>{{ modelAIdentity }}</strong>
+							</div>
+							<div class="card-body">
+								<div *ngIf="!waitingForResponseA">
+									<div [innerHTML]="modelAResponse || 'Model A response...'" class="font-monospace"
+										style="white-space: pre-wrap"></div>
+								</div>
+								<div *ngIf="waitingForResponseA" class="text-center">
+									<div class="spinner-border" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="card h-100 text-white bg-primary border-light">
+							<div class="card-header">
+								Model B: <strong>{{ modelBIdentity }}</strong>
+							</div>
+							<div class="card-body">
+								<div *ngIf="!waitingForResponseB">
+									<div [innerHTML]="modelBResponse || 'Model B response...'" class="font-monospace"
+										style="white-space: pre-wrap"></div>
+								</div>
+								<div *ngIf="waitingForResponseB" class="text-center">
+									<div class="spinner-border" role="status">
+										<span class="visually-hidden">Loading...</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row g-3">
+					<div class="col-12 col-md-4">
+						<button type="button" class="btn border-light border-2 btn-warning w-100"
+							[disabled]="voteButtonsDisabled" (click)="vote(VoteOption.MODEL_A_BETTER)">
+							👈 Model A was better
+						</button>
+					</div>
+					<div class="col-12 col-md-4">
+						<button type="button" class="btn border-light border-2 btn-warning w-100"
+							[disabled]="voteButtonsDisabled" (click)="vote(VoteOption.TIE)">
+							Tie 🤝
+						</button>
+					</div>
+					<div class="col-12 col-md-4">
+						<button type="button" class="btn border-light border-2 btn-warning w-100"
+							[disabled]="voteButtonsDisabled" (click)="vote(VoteOption.MODEL_B_BETTER)">
+							Model B was better 👉
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row pb-5 px-3">
+		<p class="fs-4 fw-bold">Checkout the leaderboard:</p>
+		<div class="card text-white bg-primary border-light border-2 col-md-12">
+			<div class="card-body">
+				<div class="row pb-4">
+					<div class="col-md-3 pb-3 pb-md-0">
+						<label for="leaderboardCategorySelect" class="form-label">Category</label>
+						<select id="leaderboardCategorySelect"
+							class="form-select bg-primary text-white border-light border-2"
+							[(ngModel)]="selectedLeaderboardCategory" name="category"
+							(ngModelChange)="onLeaderboardCategoryChange()">
+							<option disabled>Select a category</option>
+							<option [ngValue]="null" selected>Overall</option>
+							<option *ngFor="let category of categories" [ngValue]="category">
+								{{ categoryLabels[category] }}
+							</option>
+						</select>
+					</div>
+					<div class="col-md-3 pb-3 pb-md-0">
+						<div class="card text-white h-100 bg-primary border-light">
+							<div class="card-body d-flex align-items-center justify-content-center">
+								<p class="card-text fs-5 text-center">Number of votes: {{ totalVotes }}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 pb-3 pb-md-0">
+						<div class="card text-white h-100 bg-primary border-light">
+							<div class="card-body d-flex align-items-center justify-content-center">
+								<p class="card-text fs-5 text-center">Number of ties: {{ numberOfTies }}</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="card text-white h-100 bg-primary border-light">
+							<div class="card-body d-flex align-items-center justify-content-center">
+								<p class="card-text fs-5 text-center">Score calculation: {{
+									getFormattedLeaderboardTimestamp() }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card text-white bg-primary border-light">
+					<div class="table-responsive mx-3 mt-3">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th scope="col">Rank #</th>
+									<th scope="col">Model name</th>
+									<th scope="col">Score</th>
+									<th scope="col">Number of Votes</th>
+									<th scope="col">Organization</th>
+									<th scope="col">License</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let leaderboardRow of leaderboard.rows; let i = index">
+									<td>{{ i + 1 }}</td>
+									<td>{{ leaderboardRow.modelName }}</td>
+									<td>{{ leaderboardRow.score }}</td>
+									<td>{{ leaderboardRow.numberOfVotes }}</td>
+									<td>{{ leaderboardRow.organization }}</td>
+									<td>{{ leaderboardRow.license }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
